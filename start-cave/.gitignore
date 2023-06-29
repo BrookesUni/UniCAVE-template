@@ -1,0 +1,9 @@
+/venv/
+/.idea/
+*.pyc
+/Data/PlayerData/
+.env
+/tokens/
+/logs/
+creds/token.pickle
+/Data/

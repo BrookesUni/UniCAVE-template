@@ -1,0 +1,4 @@
+build_folder_destination: C:/Users/HP Z4/Documents/CAVEPET_SharedDrive/Build
+build_folder_origin: C:/CAVEPET/UniCAVE/UniCAVE2021/Build
+ig_shared_folder: Z:/Build/
+overwrite_build: 1

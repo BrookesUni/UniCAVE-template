@@ -1,0 +1,8 @@
+build-path: /Build-cave/Brookes-UniCave.exe
+
+FRONT1: ["FRONT1", "left"]
+FRONT2: ["FRONT1", "right"]
+LEFT1: ["LEFT1", "left"]
+LEFT2: ["LEFT1", "right"]
+RIGHT1: ["RIGHT1", "left"]
+RIGHT2: ["RIGHT1","right"]

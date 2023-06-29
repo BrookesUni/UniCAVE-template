@@ -1,0 +1,28 @@
+# https://github.com/widVE/UniCAVE/wiki/Command-Line-Options
+
+#build-path: ..\UniCAVE2021\Build-cave\Brookes-UniCave.exe
+build-path: C:\unicave-brookes\UniCAVE2021\Build\Brookes-UniCave.exe
+head-node: TVZ-HOST
+
+# specify which eyeball it is
+child-nodes:
+  - ["FRONT1", "left"]
+  - ["FRONT1", "right"]
+  - ["LEFT1", "left"]
+  - ["LEFT1", "right"]
+  - ["RIGHT1", "left"]
+  - ["RIGHT1", "right"]
+
+# for local debugging
+serverAddress: "192.168.10.1"
+serverPort: "8000"
+
+# 0 = False, 1 = True
+popupWindow: "1"
+
+sleep-time: 10
+child-wait: 1
+head-wait: 2
+
+# timeout for client to exit application if no connection established
+TimeoutWaitTime: "20"
