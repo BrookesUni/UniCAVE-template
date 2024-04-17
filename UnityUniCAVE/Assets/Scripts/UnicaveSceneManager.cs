@@ -79,7 +79,6 @@ public class UnicaveSceneManager : NetworkBehaviour
 
         // Only server loads a scene
         if (!IsServer || string.IsNullOrEmpty(sceneName)) return;
-            //NetworkManager.SceneManager.OnSceneEvent += SceneManager_OnSceneEvent;
         SceneEventProgressStatus status = NetworkManager.SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         CheckStatus(status);
 

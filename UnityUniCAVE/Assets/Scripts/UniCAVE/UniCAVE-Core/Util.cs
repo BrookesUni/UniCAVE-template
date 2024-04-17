@@ -36,7 +36,6 @@ namespace UniCAVE
             string overridden = Util.GetArg("overrideMachineName");
             if(overridden != null)
             {
-				//Debug.Log("Get Machine Name: " + overridden);
                 return overridden;
             }
 

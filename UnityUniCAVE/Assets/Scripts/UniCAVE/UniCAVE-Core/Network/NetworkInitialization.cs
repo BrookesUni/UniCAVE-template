@@ -15,6 +15,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using Unity.Netcode.Transports.UTP;
+using static UnityEngine.GraphicsBuffer;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -121,14 +122,14 @@ namespace UniCAVE
             // If in editor, always start as server.
             networkManager.StartServer();
 #endif
-            try
-            {
-                // There is no need for the UI DEBUGGER to be connected every single time
-                _debugInfo = GameObject.Find("UI_DEBUGGER").GetComponent<DebugInfo>();
-            }
-            catch {
-                Debug.Log("UI DEBUGGER not found in the scene");
-            }
+            //try
+            //{
+            //    // There is no need for the UI DEBUGGER to be connected every single time
+            //    _debugInfo = GameObject.Find("UI_DEBUGGER").GetComponent<DebugInfo>();
+            //}
+            //catch {
+            //    Debug.Log("UI DEBUGGER not found in the scene");
+            //}
         }
 
         /// <summary>
@@ -167,26 +168,52 @@ namespace UniCAVE
         }
 
 #if UNITY_EDITOR
-        [CanEditMultipleObjects]
+        //[CanEditMultipleObjects]
         [CustomEditor(typeof(NetworkInitialization))]
         class Editor : UnityEditor.Editor
         {
             public override void OnInspectorGUI()
             {
-                serializedObject.Update();
+                base.OnInspectorGUI();
 
-                //EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(networkManager)));
+                NetworkInitialization script = (NetworkInitialization)target;
+                
 
-                //special handling for old machine names:
-                //var oldMachineName = serializedObject.FindProperty(nameof(oldHeadMachine));
-                //var machineName = serializedObject.FindProperty(nameof(headMachineAsset));
-                //MachineName.DrawDeprecatedMachineName(oldMachineName, machineName, "HeadMachine");
+                string head_machine_message = "Machine name match";
+                GUIStyle myStyle = new GUIStyle(GUI.skin.label);
+                myStyle.fontSize = 12;
+                myStyle.fontStyle = FontStyle.Italic;
+                myStyle.normal.textColor = Color.green;
+                
+                string currentMachineName = Util.GetMachineName();
+                if (script.headMachineAsset.Name != currentMachineName)
+                {
+                    head_machine_message = $"Machine name mismatch{script.headMachineAsset.Name} and {currentMachineName}";
+                    myStyle.normal.textColor = Color.red;
+                    Debug.LogError(head_machine_message);
+                    Debug.LogError("Please update machine name to run UniCAVE!");
+                }
 
-                EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(NetworkInitialization.serverAddress)));
+                EditorGUILayout.LabelField(head_machine_message, myStyle);
 
-                EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(NetworkInitialization.serverPort)));
+                //serializedObject.Update();
 
-                serializedObject.ApplyModifiedProperties();
+
+                //GUI.enabled = false;
+                //EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(NetworkInitialization.headMachineAsset)));
+                //GUI.enabled = true;
+
+
+                //// Create a custom style for labels
+
+
+
+                //serializedObject.ApplyModifiedProperties();
+
+                if (GUI.changed)
+                {
+                    EditorUtility.SetDirty(target);
+                }
             }
         }
 #endif

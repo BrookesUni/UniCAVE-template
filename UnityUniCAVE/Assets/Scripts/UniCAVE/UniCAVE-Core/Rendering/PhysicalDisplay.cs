@@ -359,7 +359,7 @@ namespace UniCAVE
                 TryToDeSerialize(serializedLocation);
             }
 
-            Debug.Log("EXCLUSIVE: " + (exclusiveFullscreen ? "YES" : "NO"));
+            //Debug.Log("EXCLUSIVE: " + (exclusiveFullscreen ? "YES" : "NO"));
 
             if (!ShouldBeActive())
             {
@@ -370,15 +370,15 @@ namespace UniCAVE
 
             Debug.Log("Display Active: " + gameObject.name);
 
-            foreach (string er in GetSettingsErrors())
-            {
-                Debug.Log("Display Warning for Display: " + gameObject.name + ": " + er);
-            }
+            //foreach (string er in GetSettingsErrors())
+            //{
+            //    Debug.Log("Display Warning for Display: " + gameObject.name + ": " + er);
+            //}
 
-            if (head == null)
-            {
-                Debug.Log("Display Error for Display: " + gameObject.name + ": Physical Display has no head object");
-            }
+            //if (head == null)
+            //{
+            //    Debug.Log("Display Error for Display: " + gameObject.name + ": Physical Display has no head object");
+            //}
 
             _initialized = true;
 
