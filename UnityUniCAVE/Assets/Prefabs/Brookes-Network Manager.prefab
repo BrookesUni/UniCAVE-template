@@ -50,7 +50,7 @@ MonoBehaviour:
   networkManager: {fileID: 8265822772127632036, guid: 0657bd8377cf13c44a9b71ec151a52ee,
     type: 3}
   headMachineAsset: {fileID: 11400000, guid: 2d051117555918d4ca6aec354cd4407d, type: 2}
-  serverAddress: 192.168.10.1
+  serverAddress: 192.168.1.1
   serverPort: 7568
 --- !u!114 &2359901791412278157
 MonoBehaviour:
