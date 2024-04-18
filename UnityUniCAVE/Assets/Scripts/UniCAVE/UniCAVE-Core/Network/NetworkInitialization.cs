@@ -15,7 +15,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using Unity.Netcode.Transports.UTP;
-using static UnityEngine.GraphicsBuffer;
+using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -61,10 +61,20 @@ namespace UniCAVE
         public int serverPort = 7568;
 
         /// <summary>
+        /// Used to ensure correct IP address is selected
+        /// </summary>
+        private NetworkMapping _networkMapping = new NetworkMapping();
+
+        /// <summary>
+        /// development flag to decide if Ip Address should be updated automatically based on the machine name
+        /// </summary>
+        [Tooltip("This bool is used to decide if IP address should be automatically updated based on the machine name, very helpful when switching machines")]
+        public bool AutoIpUpdate = false;
+
+        /// <summary>
         /// Reference to debug information display to show connection status on screen.
         /// </summary>
         private DebugInfo _debugInfo;
-
 
         /// <summary>
         /// Singleton instance.
@@ -147,7 +157,7 @@ namespace UniCAVE
                 }
                 return;
             }
-            
+
             // If we are not the server, but aren't connected to the server, try to connect.
             if (!networkManager.IsClient)
             {
@@ -177,38 +187,54 @@ namespace UniCAVE
                 base.OnInspectorGUI();
 
                 NetworkInitialization script = (NetworkInitialization)target;
-                
+
+                string currentMachineName = Util.GetMachineName(); ;
+                if (script.AutoIpUpdate)
+                {
+                    Dictionary<string, string> mapping = script._networkMapping.GetNameToIpMapping();
+                    if (mapping.ContainsKey(currentMachineName))
+                    {
+                        string recommendedIpAddress = mapping[currentMachineName];
+                        script.serverAddress = recommendedIpAddress;
+                        script.headMachineAsset.Name = currentMachineName;
+                    }
+                    else
+                    {
+                        // Display warning
+                        GUIStyle style = new GUIStyle(GUI.skin.label);
+                        style.alignment = TextAnchor.MiddleCenter;
+                        style.fontSize = 12;
+                        style.fontStyle = FontStyle.Italic;
+                        style.normal.textColor = Color.magenta;
+                        EditorGUILayout.LabelField("IP address not found for this machine name", style);
+                    }
+
+                }
+
 
                 string head_machine_message = "Machine name match";
                 GUIStyle myStyle = new GUIStyle(GUI.skin.label);
                 myStyle.fontSize = 12;
                 myStyle.fontStyle = FontStyle.Italic;
                 myStyle.normal.textColor = Color.green;
-                
-                string currentMachineName = Util.GetMachineName();
+
+                currentMachineName = Util.GetMachineName();
                 if (script.headMachineAsset.Name != currentMachineName)
                 {
                     head_machine_message = $"Machine name mismatch{script.headMachineAsset.Name} and {currentMachineName}";
                     myStyle.normal.textColor = Color.red;
-                    Debug.LogError(head_machine_message);
-                    Debug.LogError("Please update machine name to run UniCAVE!");
+                    myStyle.fontStyle = FontStyle.Bold;
+                    Debug.LogError(head_machine_message + " Please update machine name to run UniCAVE!");
+
+                    Dictionary<string, string> mapping = script._networkMapping.GetNameToIpMapping();
+                    if (mapping.ContainsKey(currentMachineName))
+                    {
+                        string recommendedIpAddress = mapping[currentMachineName];
+                        Debug.LogError($"Found recommended IP address: {recommendedIpAddress}");
+                    }
                 }
 
                 EditorGUILayout.LabelField(head_machine_message, myStyle);
-
-                //serializedObject.Update();
-
-
-                //GUI.enabled = false;
-                //EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(NetworkInitialization.headMachineAsset)));
-                //GUI.enabled = true;
-
-
-                //// Create a custom style for labels
-
-
-
-                //serializedObject.ApplyModifiedProperties();
 
                 if (GUI.changed)
                 {
